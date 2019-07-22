@@ -1,0 +1,122 @@
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdRandom;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class RandomizedQueue<Item> implements Iterable<Item> {
+    private class Node{
+        Item item;
+        Node next;
+        Node prev;
+    }
+    private Node first;
+    private Node last;
+    private int n;//n表示元素个数
+    // construct an empty randomized queue
+    public RandomizedQueue(){
+        first=null;
+        last=null;
+        n=0;
+    }
+
+    // is the randomized queue empty?
+    public boolean isEmpty(){return n==0;}
+
+    // return the number of items on the randomized queue
+    public int size(){ return n; }
+
+    // add the item
+    public void enqueue(Item item){
+        if(item==null) throw new IllegalArgumentException();
+        Node oldlast=last;
+        last=new Node();
+        last.item=item;
+        last.next=null;
+        if(isEmpty()) first=last;
+        else oldlast.next=last;
+        n++;
+    }
+
+
+    // remove and return a random item
+    public Item dequeue(){
+        if (isEmpty()) throw new NoSuchElementException();
+        Node now=first;
+        while(now.item!=sample()){
+            now=now.next;
+        }
+        if(now==first){
+            first=first.next;
+            first.prev=null;
+            if (isEmpty()) last=null;
+
+        }else if(now==last){
+            last=last.prev;
+            last.next=null;
+            if (isEmpty()) first=null;
+        }else{
+            now.prev.next=now.next;
+            now.next.prev=now.prev;
+            now.prev=null;
+            now.next=null;
+        }
+        n--;
+        return sample();
+
+    }
+
+    // return a random item (but do not remove it)
+    public Item sample(){
+        if (isEmpty()) throw new NoSuchElementException();
+        Node select=first;
+        int i= StdRandom.uniform(n);
+        while(i!=0){
+            select=select.next;
+            i--;
+        }
+        return select.item;
+    }
+
+    // return an independent iterator over items in random order
+    public Iterator<Item> iterator(){
+        return new RandomizedQueueIterator();
+    }
+    private class RandomizedQueueIterator implements Iterator<Item>{
+        private Node current=first;
+        public boolean hasNext(){
+            return current!=null;
+        }
+        public void remove(){throw new UnsupportedOperationException();}
+        public Item next(){
+            if(!hasNext()) throw new NoSuchElementException();
+            Item item=current.item;
+            current=current.next;
+            return item;
+        }
+
+    }
+
+    // unit testing (required)
+    public static void main(String[] args){
+        RandomizedQueue<String> randomizedQueue=new RandomizedQueue<String>();
+        StdOut.println("现在的元素个数是："+randomizedQueue.n);
+        randomizedQueue.enqueue("I");
+        randomizedQueue.enqueue("Love");
+        randomizedQueue.enqueue("DJZ");
+        randomizedQueue.enqueue("very");
+        randomizedQueue.enqueue("much");
+        StdOut.println("现在的元素个数是："+randomizedQueue.n);
+        for(String s:randomizedQueue){
+            StdOut.println(s);
+        }
+        randomizedQueue.dequeue();
+        randomizedQueue.dequeue();
+        StdOut.println("现在的元素个数是："+randomizedQueue.n);
+        for(String s:randomizedQueue){
+            StdOut.println(s);
+        }
+
+    }
+
+}
