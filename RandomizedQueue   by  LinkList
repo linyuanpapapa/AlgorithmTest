@@ -43,7 +43,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Item dequeue(){
         if (isEmpty()) throw new NoSuchElementException();
         Node now=first;
-        while(now.item!=sample()){
+        Item it=sample();
+        while(now.item!=it){
             now=now.next;
         }
         if(now==first){
@@ -62,7 +63,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             now.next=null;
         }
         n--;
-        return sample();
+        return it;
 
     }
 
