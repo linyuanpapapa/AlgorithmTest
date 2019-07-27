@@ -1,0 +1,88 @@
+public class MergeSort {
+    private static Comparable[] aux;
+    public static void sort(Comparable[] a){
+        aux=new Comparable[a.length];
+        sort(a,0,a.length-1);
+    }
+    public static void sort(Comparable[] a,int lo,int hi){
+        //将数组a[lo,hi]排序
+        if(hi<=lo) return;
+        if(hi-lo<=4) Insertion.sort(a);//当数组中元素过少时，使用插入排序以节省空间
+        int mid=lo+(hi-lo)/2;
+        sort(a,0,mid);
+        sort(a,mid+1,hi);
+        if(less(a[mid],a[mid+1])) return;//如果第一个有序子数组的最后一位小于第二个的第一位，跳过归并操作。
+        merge(a,lo,hi,mid);
+
+    }
+    public static void merge(Comparable[] a,int lo,int hi,int mid) {
+        //将a[lo,mid]和a[mid+1,hi]进行归并
+        int i = lo, j = mid + 1;
+        //将数组a的数组都复制到数组aux里
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k];
+        }
+        for (int p = lo; p <= hi; p++) {
+            if (i > mid) a[p] = aux[j++];
+            else if (j > hi) a[p] = aux[i++];
+            else if (less(aux[i], aux[j])) a[p] = aux[i++];
+            else a[p] = aux[j++];
+        }
+    }
+    //最后一个改进在于节省元素拷贝到辅助数组的时间，每一次递归时转换一下原数组和辅助数组的位置
+//    public static void sort(Comparable[] a,Comparable[] aux,int lo,int hi){
+//        //将数组a[lo,hi]排序
+//        if(hi<=lo) return;
+//        int mid=lo+(hi-lo)/2;
+//        sort(aux,a,lo,mid);
+//        sort(aux,a,mid+1,hi);
+//        merge(a,aux,lo,hi,mid);
+//
+//    }
+//    public static void merge(Comparable[] aux,int lo,int hi,int mid){
+//        //将a[lo,mid]和a[mid+1,hi]进行归并
+//        int i=lo,j=mid+1;
+//        //将数组a的数组都复制到数组aux里
+//        for(int k=lo;k<=hi;k++){
+//            aux[k]=a[k];
+//        }
+//        for(int p=lo;p<=hi;p++) {
+//            if (i > mid)                    aux[p] = a[j++];
+//            else if (j > hi)                aux[p] = a[i++];
+//            else if (less(aux[i], aux[j]))  aux[p]=a[i++];
+//            else                            aux[p]=a[j++];
+//        }
+//    }
+
+
+    private static boolean less(Comparable v,Comparable w){
+        return v.compareTo(w)<0;
+    }
+    //compareTo()方法，v>w时返回1，相等时返回0，v<w时返回-1
+    //less()方法，前者大于等于后者时返回0，前者小于后者时返回1；
+
+    private static void exch(Comparable[] a,int i,int j){
+        Comparable t=a[i];
+        a[i]=a[j];
+        a[j]=t;
+    }
+    private static void show(Comparable[] a){
+        for(int i=0;i<a.length;i++)
+            System.out.print(a[i]+"  ");
+        System.out.println();
+    }
+    public static boolean isSorted(Comparable[] a){
+        for(int i=1;i<a.length;i++)
+            if(less(a[i],a[i-1]))  return false;//前者大于后者时，返回false
+        return true;//排序正确时返回true
+    }
+
+    public static void main(String[] args) {
+        String[] a={"bed","bug","yes","zoo","panda","all","yet","shit"};
+        sort(a);
+        if(!isSorted(a)) System.out.println("haimei");
+        show(a);
+
+    }
+
+}
