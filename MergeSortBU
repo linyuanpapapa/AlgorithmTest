@@ -1,0 +1,61 @@
+/**
+ * @Author:LinYuan
+ * @Description:
+ * @Date: Create in 2019/7/27 18:40
+ * @Modified By:
+ */
+public class MergeSortBU {
+    private static Comparable[] aux;
+    public static void sort(Comparable[] a){
+        //进行lgN次两两归并
+        int N = a.length;
+        aux = new Comparable[N];
+        for (int sz = 1; sz < N; sz += sz)
+            for (int lo = 0; lo < N - sz; lo += sz + sz)
+                merge(a,lo,lo+sz-1,Math.min(lo+sz+sz-1,N-1));
+    }
+    public static void merge(Comparable[] a,int lo,int mid,int hi) {
+        //将a[lo,mid]和a[mid+1,hi]进行归并
+        int i = lo, j = mid + 1;
+        //将数组a的数组都复制到数组aux里
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k];
+        }
+        for (int p = lo; p <= hi; p++) {
+            if (i > mid) a[p] = aux[j++];
+            else if (j > hi) a[p] = aux[i++];
+            else if (less(aux[i], aux[j])) a[p] = aux[i++];
+            else a[p] = aux[j++];
+        }
+    }
+    private static boolean less(Comparable v,Comparable w){
+        return v.compareTo(w)<0;
+    }
+    //compareTo()方法，v>w时返回1，相等时返回0，v<w时返回-1
+    //less()方法，前者大于等于后者时返回0，前者小于后者时返回1；
+
+    private static void exch(Comparable[] a,int i,int j){
+        Comparable t=a[i];
+        a[i]=a[j];
+        a[j]=t;
+    }
+    private static void show(Comparable[] a){
+        for(int i=0;i<a.length;i++)
+            System.out.print(a[i]+"  ");
+        System.out.println();
+    }
+    public static boolean isSorted(Comparable[] a){
+        for(int i=1;i<a.length;i++)
+            if(less(a[i],a[i-1]))  return false;//前者大于后者时，返回false
+        return true;//排序正确时返回true
+    }
+
+    public static void main(String[] args) {
+        String[] a={"bed","bug","yes","zoo","panda","all","yet","shit"};
+        sort(a);
+        if(!isSorted(a)) System.out.println("haimei");
+        show(a);
+
+    }
+
+}
