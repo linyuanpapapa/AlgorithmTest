@@ -9,23 +9,29 @@ public class Selection {
         }
 
     }
-
+    
+    //用于判断两个元素的大小
+    //less()方法，前者大于等于后者时返回0，前者小于后者时返回1；
+    //compareTo()方法，v>w时返回1，相等时返回0，v<w时返回-1；
     private static boolean less(Comparable v,Comparable w){
         return v.compareTo(w)<0;
     }
-    //less()方法，前者大于等于后者时返回0，前者小于后者时返回1；
-    //compareTo()方法，v>w时返回1，相等时返回0，v<w时返回-1；
-
+    
+    //用于交换两个元素
     private static void exch(Comparable[] a,int i,int j){
         Comparable t=a[i];
         a[i]=a[j];
         a[j]=t;
     }
+    
+    //打印每一个元素
     private static void show(Comparable[] a){
         for(int i=0;i<a.length;i++)
             System.out.print(a[i]+"  ");
         System.out.println();
     }
+    
+    //判断数组是否排序完成
     public static boolean isSorted(Comparable[] a){
         for(int i=1;i<a.length;i++)
             if(less(a[i],a[i-1]))  return false;//前者大于后者时，返回false
