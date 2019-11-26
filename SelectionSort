@@ -1,4 +1,7 @@
 public class Selection {
+    //选择排序：通过n-i次关键字间的比较，从n-i+1个记录里选出关键字最小的记录，并和第i(1<=i<=n)个记录进行交换。
+    //分析时间复杂度，无论最好最差的情况，其比较次数都一样多为n(n-1)/2，而对于交换次数来说，最好的情况是0次，最差是n-1次。
+    //基于最终的排序时间是比较与交换的次数总和，因此，总的时间复杂度依然为O(n^2)
     public static void sort(Comparable[] a){
         int N=a.length;
         for(int i=0;i<N;i++){
@@ -7,7 +10,6 @@ public class Selection {
                 if(less(a[j],a[min])) min=j;
                 exch(a,i,min);
         }
-
     }
     
     //用于判断两个元素的大小
