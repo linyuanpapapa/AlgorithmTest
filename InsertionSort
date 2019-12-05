@@ -1,4 +1,6 @@
 public class Insertion {
+//将未排序数据插入已排好序列中的合适位置
+//每次加入一个数据，移动到合适位置
     public static void sort(Comparable[] a){
         int N=a.length;
         for(int i=1;i<N;i++){
